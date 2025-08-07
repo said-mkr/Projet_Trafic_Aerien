@@ -1,0 +1,6 @@
+{"flight_id":"6933","carrier":"DL","origin":"JFK","dest":"MIA","dep_delay":100.81,"arr_delay":123.15,"distance":2809}
+{"flight_id":"6422","carrier":"DL","origin":"EWR","dest":"MIA","dep_delay":48.73,"arr_delay":155.61,"distance":3059}
+{"flight_id":"2457","carrier":"AA","origin":"LGA","dest":"LAX","dep_delay":10.73,"arr_delay":4.58,"distance":3818}
+{"flight_id":"4415","carrier":"B6","origin":"JFK","dest":"LAX","dep_delay":56.64,"arr_delay":128.33,"distance":2103}
+{"flight_id":"6442","carrier":"DL","origin":"JFK","dest":"MIA","dep_delay":28.66,"arr_delay":127.77,"distance":2507}
+{"flight_id":"1321","carrier":"AA","origin":"EWR","dest":"ORD","dep_delay":117.86,"arr_delay":16.88,"distance":817}

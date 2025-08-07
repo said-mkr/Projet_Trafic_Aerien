@@ -1,0 +1,3 @@
+{"flight_id": "AF123", "carrier": "AF", "origin": "CDG", "dest": "JFK", "dep_delay": 12.5}
+{"flight_id": "BA456", "carrier": "BA", "origin": "LHR", "dest": "JFK", "dep_delay": -3.0}
+{"flight_id": "DL789", "carrier": "DL", "origin": "ATL", "dest": "CDG", "dep_delay": 0.0}

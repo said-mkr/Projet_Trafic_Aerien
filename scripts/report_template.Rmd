@@ -1,0 +1,122 @@
+---
+title: "Rapport Trafic Aérien"
+author: "Projet Groupe"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+# ✈️ Rapport Trafic Aérien – Analyse Globale
+
+Ce rapport présente une analyse descriptive et statistique des vols à partir de la base SQLite `flights.db`.  
+Les données proviennent du package `nycflights13` et ont été nettoyées avant importation.
+
+---
+
+## 🔗 1. Connexion à la base SQLite
+
+```{r setup, message=FALSE, warning=FALSE, include=FALSE}
+library(DBI)
+library(RSQLite)
+library(dplyr)
+library(ggplot2)
+library(DT)
+
+# Connexion à la base SQLite
+con <- dbConnect(RSQLite::SQLite(), "../data/flights.db")
+```
+
+---
+
+## 👀 2. Aperçu des données
+
+```{r preview, echo=FALSE}
+flights_preview <- dbGetQuery(con, "SELECT * FROM flights LIMIT 10")
+DT::datatable(flights_preview)
+```
+
+---
+
+## 📊 3. Statistiques Globales par Compagnie
+
+```{r stats_carrier, echo=FALSE}
+stats <- dbGetQuery(con, "
+  SELECT carrier,
+         COUNT(*) AS nb_vols,
+         ROUND(AVG(dep_delay),2) AS retard_moyen,
+         ROUND(AVG(arr_delay),2) AS retard_arrivee_moyen
+  FROM flights
+  GROUP BY carrier
+  ORDER BY retard_moyen DESC
+")
+DT::datatable(stats)
+```
+
+---
+
+## 📈 4. Distribution des Retards au Départ
+
+```{r plot_delay, echo=FALSE}
+delay_data <- dbGetQuery(con, "
+  SELECT dep_delay FROM flights WHERE dep_delay IS NOT NULL
+")
+ggplot(delay_data, aes(x = dep_delay)) +
+  geom_histogram(binwidth = 10, fill = 'steelblue', color = 'white') +
+  xlim(-50, 200) +
+  labs(title = "Distribution des Retards au Départ",
+       x = "Retard (minutes)", y = "Nombre de vols")
+```
+
+---
+
+## 🌍 5. Top 10 des Destinations les Plus Fréquentées
+
+```{r top_destinations, echo=FALSE}
+top_dest <- dbGetQuery(con, "
+  SELECT dest, COUNT(*) AS nb_vols
+  FROM flights
+  GROUP BY dest
+  ORDER BY nb_vols DESC
+  LIMIT 10
+")
+ggplot(top_dest, aes(x = reorder(dest, nb_vols), y = nb_vols)) +
+  geom_bar(stat = "identity", fill = "darkorange") +
+  coord_flip() +
+  labs(title = "Top 10 Destinations", x = "Destination", y = "Nombre de vols")
+```
+
+---
+
+## ⏳ 6. Évolution du Nombre de Vols par Mois
+
+```{r vols_mensuels, echo=FALSE}
+monthly <- dbGetQuery(con, "
+  SELECT strftime('%m', sched_dep_datetime) AS mois,
+         COUNT(*) AS nb_vols
+  FROM flights
+  GROUP BY mois
+  ORDER BY mois
+")
+ggplot(monthly, aes(x = mois, y = nb_vols, group=1)) +
+  geom_line(color="red", size=1.2) +
+  geom_point(size=2) +
+  labs(title="Évolution Mensuelle du Trafic Aérien", x="Mois", y="Nombre de vols")
+```
+
+---
+
+## ✅ 7. Déconnexion de la Base
+
+```{r disconnect, include=FALSE}
+dbDisconnect(con)
+```
+
+---
+
+# ✅ Conclusion
+
+Ce rapport fournit un **aperçu interactif et statistique du trafic aérien de NYC en 2013**.  
+➡️ Il peut être enrichi par d’autres analyses comme :
+- Modèles de prédiction de retards,
+- Comparaison par aéroport d’origine,
+- Analyse des compagnies avec les meilleurs et pires retards.
+

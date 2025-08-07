@@ -1,0 +1,5 @@
+{"flight_id":"9053","carrier":"AA","origin":"JFK","dest":"ORD","dep_delay":92.89,"arr_delay":158.6,"distance":3763}
+{"flight_id":"2542","carrier":"UA","origin":"EWR","dest":"MIA","dep_delay":10.11,"arr_delay":142.93,"distance":911}
+{"flight_id":"6096","carrier":"UA","origin":"LGA","dest":"MIA","dep_delay":73.67,"arr_delay":132.02,"distance":890}
+{"flight_id":"7200","carrier":"DL","origin":"EWR","dest":"ORD","dep_delay":76.59,"arr_delay":73.89,"distance":1931}
+{"flight_id":"3414","carrier":"DL","origin":"EWR","dest":"MIA","dep_delay":115.57,"arr_delay":18.56,"distance":314}

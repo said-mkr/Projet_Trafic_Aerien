@@ -1,0 +1,28 @@
+# Dockerfile pour Shiny + packages R Big Data optimisés
+FROM rocker/shiny:latest
+
+# Installer les dépendances système pour arrow et autres packages
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+        libssl-dev libcurl4-openssl-dev libxml2-dev \
+        libfontconfig1-dev libharfbuzz-dev libfribidi-dev \
+        libfreetype6-dev libpng-dev libtiff5-dev libjpeg-dev \
+        cmake g++ make && \
+    rm -rf /var/lib/apt/lists/*
+
+# Installer les packages R nécessaires (en une seule commande pour le cache Docker)
+RUN R -e "install.packages(c('shinydashboard','DT','ggplot2','dplyr','arrow','purrr','jsonlite','DBI','RSQLite'), repos='https://cloud.r-project.org')"
+
+
+# Copier l'app Shiny, les scripts R, la base SQLite et les données synchronisées
+COPY ./app /srv/shiny-server/app
+COPY ./scripts /srv/shiny-server/scripts
+COPY ./data/flights.db /srv/shiny-server/scripts/flights.db
+COPY ./parquet_data /srv/shiny-server/parquet_data
+
+WORKDIR /srv/shiny-server/app
+
+# Exposer le port par défaut de Shiny
+EXPOSE 3838
+
+CMD ["/usr/bin/shiny-server"]
